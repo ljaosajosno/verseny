@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('points_blank')->default(0);
             $table->text('description')->nullable();
             $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
       
             $table->unique(['name', 'year']);
 });
