@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('round_name', 100);
             $table->date('round_date')->nullable();
             $table->text('description')->nullable();
+
+            $table->timestamps();
         });
     }
 

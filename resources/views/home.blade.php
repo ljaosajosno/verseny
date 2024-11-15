@@ -7,49 +7,27 @@
 </head>
 <body>
     @auth
-    <p>you are logged in :D</p>
+
     <form action="/logout" method="POST">
         @csrf
         <button>Log Out</button>
     </form>
     <br><br>
-    <form action="/addComp" method='POST' id=addComp>
-        @csrf
-        <label for="compname">Name:</label><br>
-        <input type="text" id="compname" name="compname"><br>
-
-        <label for="compyear">Year:</label><br>
-        <input type="month" id="compyear" name="compyear"><br>
-
-        <label for="complang">Langauge:</label><br>
-        <input type="text" id="complang" name="complang"><br>
-
-        <label for="compptscor">Points for correct answer:</label><br>
-        <input type="number" id="compptscor" name="compptscor" value=1><br>
-
-        <label for="compptsemp">Points for empty answer:</label><br>
-        <input type="number" id="compptsemp" name="compptsemp" value=0><br>
-
-        <label for="compptsinc">Points for incorrect answer:</label><br>
-        <input type="number" id="compptsinc" name="compptsinc" value=-1><br>
-
-        <label for="desc">Description:</label><br>
-        <input type="text" id="desc" name="desc"><br><br>
-
-        <input type="submit" value="Add Competition">
-    </form>
+    <a href="addComp">Add a new competition</a>
+    <br><br>
+    <a href="addRound">Add a new competition</a>
 
     @else
     <form action="/register" method='POST' id=register>
         @csrf
         <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name"><br>
+        <input type="text" id="name" name="name" ><br>
 
         <label for="email">Email address:</label><br>
-        <input type="email" id="email" name="email"><br>
+        <input type="email" id="email" name="email" required><br>
 
         <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password"><br>
+        <input type="password" id="password" name="password" required><br>
 
         <label for="phone">Phone number::</label><br>
         <input type="tel" id="phone" name="phone"><br>
