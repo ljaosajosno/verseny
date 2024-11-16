@@ -20,7 +20,8 @@ return new class extends Migration
             $table->date('round_date')->nullable();
             $table->text('description')->nullable();
 
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 

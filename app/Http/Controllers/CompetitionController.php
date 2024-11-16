@@ -18,7 +18,6 @@ class CompetitionController extends Controller
             'desc'=>[]
         ]);
     
-        
         $input_fields['name'] = strip_tags($input_fields['compname']);
         $input_fields['year'] = $input_fields['compyear'];
         $input_fields['language'] = strip_tags($input_fields['complang']);
@@ -27,15 +26,14 @@ class CompetitionController extends Controller
         $input_fields['points_incorrect'] = $input_fields['compptsinc'];
         $input_fields['description'] = strip_tags($input_fields['desc']);
     
-        
         unset($input_fields['compname'], $input_fields['compyear'], $input_fields['complang'], $input_fields['compptscor'], $input_fields['compptsemp'], $input_fields['compptsinc'], $input_fields['desc']);
     
+        try{
+            Competition::create($input_fields);
+        } catch (Exception $e){
+
+        }
         
-        Competition::create($input_fields);
-    
         return redirect('/');
     }
-
-   
-
 }

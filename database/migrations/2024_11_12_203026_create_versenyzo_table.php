@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users', 'user_id')->onDelete('cascade');
             $table->foreignId('competition_id')->constrained('competitions', 'competition_id')->onDelete('cascade');
             $table->foreignId('round_id')->nullable()->constrained('rounds', 'round_id')->onDelete('set null');
-            $table->integer('score')->default(-1);
+            $table->integer('score');
+            $table->timestamps();
         });
     }
 
