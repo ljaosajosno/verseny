@@ -18,7 +18,7 @@ class CompetitorController extends Controller
     
         Competitor::create($input_fields);
         
-        return redirect('/'); 
+        return response()->json(['message' => 'Competitor added successfully'], 200);
     }
 
     public function index()

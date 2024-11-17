@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Add Competitor</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
@@ -17,7 +19,7 @@
                         <h4>Add Competitor</h4>
                     </div>
                     <div class="card-body">
-                        <form action="/addCompetitor" id="addCompetitorForm" method="POST">
+                        <form id="addCompetitorForm" method="POST">
                             @csrf
 
                             <div class="mb-3">
@@ -40,17 +42,21 @@
                                 </select>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="user_id" class="form-label">User</label>
-                                <select name="user_id" id="user_id" form="addCompetitorForm" class="form-select" required>
-                                    <option value="" disabled selected>Select a user</option>
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->user_id }}">{{ $user->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            @if (auth()->user()->role === 'admin')
+                                <div class="mb-3">
+                                    <label for="user_id" class="form-label">User</label>
+                                    <select name="user_id" id="user_id" form="addCompetitorForm" class="form-select" required>
+                                        <option value="" disabled selected>Select a user</option>
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user->user_id }}">{{ $user->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @else
+                                <input type="hidden" name="user_id" value="{{ auth()->user()->user_id }}" form="addCompetitorForm">
+                            @endif
 
-                            <button type="submit" class="btn btn-primary w-100">Add Competitor</button>
+                            <button type="submit" id="submit" class="btn btn-primary w-100">Add Competitor</button>
                         </form>
                     </div>
                 </div>
@@ -65,25 +71,64 @@
         </div>
     </div>
     <script>
-        
-        document.getElementById('competition_id').addEventListener('change', function() {
-            var competitionId = this.value;
-
+        $('#competition_id').on('change', function() {
+            var competitionId = $(this).val();
+    
             var rounds = @json($rounds);
-
+    
             var filteredRounds = rounds.filter(function(round) {
                 return round.competition_id == competitionId;
             });
+    
+            var $roundSelect = $('#round_id');
+    
+            $roundSelect.empty();
+            $roundSelect.append('<option value="" disabled selected>Select a round</option>');
+    
+            $.each(filteredRounds, function(index, round) {
+                $roundSelect.append($('<option>', {
+                    value: round.round_id,
+                    text: round.round_name
+                }));
+            });
+        });
+    </script>
 
-            var roundSelect = document.getElementById('round_id');
-
-            roundSelect.innerHTML = '<option value="" disabled selected>Select a round</option>';
-
-            filteredRounds.forEach(function(round) {
-                var option = document.createElement('option');
-                option.value = round.round_id;
-                option.textContent = round.round_name;
-                roundSelect.appendChild(option);
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('addCompetitorForm');
+    
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault(); 
+    
+                const formData = new FormData(form);
+    
+                try {
+                    const response = await fetch('/addCompetitor', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Accept': 'application/json',
+                        },
+                        body: formData,
+                    });
+    
+                    if (response.ok) {
+                        const result = await response.json();
+                        alert(result.message || 'Round added successfully!');
+                        form.reset(); 
+                    } else {
+                        const error = await response.json();
+                        alert(
+                            error.errors
+                                ? Object.values(error.errors)[0][0]
+                                : error.message || 'An error occurred. Please try again.'
+                        );
+                    }
+                } catch (err) {
+                    console.error('Fetch error:', err);
+                    alert('An unexpected error occurred. Please try again.');
+                }
             });
         });
     </script>

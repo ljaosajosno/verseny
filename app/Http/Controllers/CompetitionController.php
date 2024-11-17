@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 
 class CompetitionController extends Controller
 {
-    public function addComp(Request $request){
+    public function addComp(Request $request)
+    {
+        
         $input_fields = $request->validate([
             'compname' => 'required',
             'compyear' => 'required',
@@ -15,9 +17,9 @@ class CompetitionController extends Controller
             'compptscor' => 'required',
             'compptsemp' => 'required',
             'compptsinc' => 'required',
-            'desc'=>[]
+            'desc' => 'nullable|string',
         ]);
-    
+
         $input_fields['name'] = strip_tags($input_fields['compname']);
         $input_fields['year'] = $input_fields['compyear'];
         $input_fields['language'] = strip_tags($input_fields['complang']);
@@ -25,15 +27,14 @@ class CompetitionController extends Controller
         $input_fields['points_blank'] = $input_fields['compptsemp'];
         $input_fields['points_incorrect'] = $input_fields['compptsinc'];
         $input_fields['description'] = strip_tags($input_fields['desc']);
-    
-        unset($input_fields['compname'], $input_fields['compyear'], $input_fields['complang'], $input_fields['compptscor'], $input_fields['compptsemp'], $input_fields['compptsinc'], $input_fields['desc']);
-    
-        try{
-            Competition::create($input_fields);
-        } catch (Exception $e){
 
-        }
         
-        return redirect('/');
+        unset($input_fields['compname'], $input_fields['compyear'], $input_fields['complang'], $input_fields['compptscor'], $input_fields['compptsemp'], $input_fields['compptsinc'], $input_fields['desc']);
+
+        
+        
+        Competition::create($input_fields);
+        return response()->json(['message' => 'Copmetition added successfully'], 200);
+        
     }
 }

@@ -17,7 +17,7 @@ class RoundController extends Controller
         ]);
     
         Round::create($input_fields);
-        
-        return redirect('/'); 
+
+        return response()->json(['message' => 'Round added successfully'], 200);
     }
 }

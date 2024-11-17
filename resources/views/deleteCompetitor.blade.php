@@ -28,16 +28,19 @@
                     <td>{{ $competitor->competition->name ?? 'No Competition' }}</td>
                     <td>{{ $competitor->round ? $competitor->round->round_name : 'No Round' }}</td>
                     <td>{{ $competitor->score }}</td>
-                    <td>
-                        <form action="/deleteCompetitors/{{ $competitor->competitor_id }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" 
-                                    onclick="return confirm('Are you sure you want to delete this competitor?');">
-                                Delete
-                            </button>
-                        </form>                        
-                    </td>
+                    @if (auth()->user()->role === 'admin')
+                        <td>
+                            <form action="/deleteCompetitors/{{ $competitor->competitor_id }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" 
+                                        onclick="return confirm('Are you sure you want to delete this competitor?');">
+                                    Delete
+                                </button>
+                            </form>
+                            
+                        </td>
+                    @endif
                 </tr>
                 @endforeach
             </tbody>

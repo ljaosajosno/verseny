@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Add Competition</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
@@ -17,7 +18,7 @@
                         <h4>Add New Competition</h4>
                     </div>
                     <div class="card-body">
-                        <form action="/addComp" method="POST" id="addComp">
+                        <form id="addComp" method="POST">
                             @csrf
 
                             <div class="mb-3">
@@ -55,14 +56,13 @@
                                 <input type="text" id="desc" name="desc" class="form-control">
                             </div>
 
-                            <button type="submit" class="btn btn-primary w-100">Add Competition</button>
+                            <button type="submit" id="submit" class="btn btn-primary w-100">Add Competition</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
         @else
-        <!-- Handle unauthenticated users -->
         @endauth
 
         <div class="text-center mt-4">
@@ -70,6 +70,45 @@
         </div>
     </div>
 
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('addComp');
+    
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault(); 
+    
+                const formData = new FormData(form);
+    
+                try {
+                    const response = await fetch('/addComp', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Accept': 'application/json',
+                        },
+                        body: formData,
+                    });
+    
+                    if (response.ok) {
+                        const result = await response.json();
+                        alert(result.message || 'Competition added successfully!');
+                        form.reset(); 
+                    } else {
+                        const error = await response.json();
+                        alert(
+                            error.errors
+                                ? Object.values(error.errors)[0][0]
+                                : error.message || 'An error occurred. Please try again.1'
+                        );
+                    }
+                } catch (err) {
+                    console.error('Fetch error:', err);
+                    alert('An unexpected error occurred. Please try again.2');
+                }
+            });
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -8,15 +8,15 @@
 </head>
 <body>
     <div class="container py-5">
-        <!-- Authenticated User Section -->
+        
         @auth
-        <div class="text-center mb-5">
-            <h2>Welcome, User</h2>
+        <div class="d-flex justify-content-end mb-5">
             <form action="/logout" method="POST" class="d-inline">
                 @csrf
                 <button class="btn btn-danger">Log Out</button>
             </form>
         </div>
+        
 
         <div class="card">
             <div class="card-header text-center bg-primary text-white">
@@ -24,15 +24,18 @@
             </div>
             <div class="card-body">
                 <div class="list-group">
-                    <a href="addComp" class="list-group-item list-group-item-action">Add a New Competition</a>
-                    <a href="addRound" class="list-group-item list-group-item-action">Add a New Round</a>
-                    <a href="addCompetitor" class="list-group-item list-group-item-action">Add a New Competitor</a>
-                    <a href="competitors" class="list-group-item list-group-item-action">List and Delete Competitors</a>
+                    @if (auth()->user()->role === 'admin')
+                        <a href="addComp" class="list-group-item list-group-item-action">Add a New Competition</a>
+                        <a href="addRound" class="list-group-item list-group-item-action">Add a New Round</a>
+                    @endif
+                    
+                    <a href="addCompetitor" class="list-group-item list-group-item-action">{{ auth()->user()->role === 'admin' ? 'Add a New Competitor' : 'Enter a Competition' }}</a>
+                    <a href="competitors" class="list-group-item list-group-item-action">{{ auth()->user()->role === 'admin' ? 'List and Delete Competitors' : 'List Competitors' }}</a>
                 </div>
             </div>
         </div>
         @else
-        <!-- Registration Section -->
+       
         <div class="row mb-5">
             <div class="col-md-6 mx-auto">
                 <div class="card">
@@ -69,7 +72,7 @@
             </div>
         </div>
 
-        <!-- Login Section -->
+        
         <div class="row">
             <div class="col-md-6 mx-auto">
                 <div class="card">
