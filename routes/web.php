@@ -29,6 +29,10 @@ Route::get('/addCompetitor', function () {
     return view('addCompetitor', compact('competitions', 'users', 'rounds'));
 });
 
+Route::delete('/deleteCompetitors/{id}', [CompetitorController::class, 'delete']);
+
+Route::get('/competitors', [CompetitorController::class, 'index']);
+
 Route::post('/register', [UserController::class, 'register']);
 
 Route::post('/logout', [UserController::class, 'logout']);

@@ -27,6 +27,7 @@
                     <a href="addComp" class="list-group-item list-group-item-action">Add a New Competition</a>
                     <a href="addRound" class="list-group-item list-group-item-action">Add a New Round</a>
                     <a href="addCompetitor" class="list-group-item list-group-item-action">Add a New Competitor</a>
+                    <a href="competitors" class="list-group-item list-group-item-action">List and Delete Competitors</a>
                 </div>
             </div>
         </div>

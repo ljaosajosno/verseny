@@ -20,4 +20,20 @@ class CompetitorController extends Controller
         
         return redirect('/'); 
     }
+
+    public function index()
+    {
+        
+        $competitors = Competitor::with(['competition', 'round', 'user'])->get();
+
+        return view('deleteCompetitor', compact('competitors'));
+    }
+
+
+    public function delete($id){
+        $competitor = Competitor::findOrFail($id);
+        $competitor->delete();
+
+        return redirect('/competitors');
+    }
 }

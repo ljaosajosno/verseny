@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Competition extends Model
 {
+
+    protected $primaryKey = 'competition_id';
     protected $fillable = [
-        'competition_id',
+        
         'name',
         'year',
         'language',
@@ -16,4 +18,9 @@ class Competition extends Model
         'points_blank', 
         'description'
     ];
+
+    public function competitors()
+    {
+        return $this->hasMany(Competitor::class, 'competition_id');  
+    }
 }

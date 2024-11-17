@@ -25,7 +25,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent();
       
             $table->unique(['name', 'year']);
-});
+        });
 
     }
 

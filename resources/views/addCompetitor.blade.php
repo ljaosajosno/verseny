@@ -65,25 +65,20 @@
         </div>
     </div>
     <script>
-        // JavaScript to handle dependent dropdowns
+        
         document.getElementById('competition_id').addEventListener('change', function() {
             var competitionId = this.value;
 
-            // Get all rounds from the backend
             var rounds = @json($rounds);
 
-            // Filter rounds based on the selected competition
             var filteredRounds = rounds.filter(function(round) {
                 return round.competition_id == competitionId;
             });
 
-            // Get the round select element
             var roundSelect = document.getElementById('round_id');
 
-            // Clear current round options
             roundSelect.innerHTML = '<option value="" disabled selected>Select a round</option>';
 
-            // Add filtered rounds to the round dropdown
             filteredRounds.forEach(function(round) {
                 var option = document.createElement('option');
                 option.value = round.round_id;
